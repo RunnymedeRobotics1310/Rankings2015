@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class RankingsNB {
+public class RankingsStLouis {
 
 	enum AllianceColour { RED, BLUE }
 	
@@ -68,17 +68,17 @@ public class RankingsNB {
 	
 	Map<Integer, TeamScore> teamScores = new HashMap<Integer, TeamScore>(100);
 	
-	public RankingsNB(String fileName) {
+	public RankingsStLouis(String fileName) {
 		this.fileName = fileName;
 	}
 	
 	public static void main(String[] args) {
 		if (args.length < 1) {
-			System.out.println("Usage " + RankingsNB.class.getSimpleName() + " inputFileMatchStats");
+			System.out.println("Usage " + RankingsStLouis.class.getSimpleName() + " inputFileMatchStats");
 			System.exit(-1);
 		}
 		
-		(new RankingsNB(args[0])).run();
+		(new RankingsStLouis(args[0])).run();
 		
 		System.exit(0);
 	}
@@ -97,9 +97,13 @@ public class RankingsNB {
 		    reader.readLine();
 		    reader.readLine();
 		    reader.readLine();
+		    reader.readLine();
 		    
 		    while ((line = reader.readLine()) != null) {
-		    	if (!processInputLine(i, line)) { break; }
+		    	if (!processInputLine(i, line)) { 
+		    		System.out.println("Error processing line " + line);
+		    		break; 
+	    		}
 		    	i++;
 		    }
 		    
@@ -301,11 +305,11 @@ public class RankingsNB {
 			field = field.trim();
 		}
 		
-		if (fields.length < 16) { return false; }
+		if (fields.length < 17) { return false; }
 
 		// If there is no score for RED or BLUE, then assume the match has not been played
 		// and stop
-		if (getInt(fields[8]) == 0 && getInt(fields[15]) == 0) { return false; }
+		if (getInt(fields[8]) == 0 && getInt(fields[16]) == 0) { return false; }
 		
 		scores.add(new AllianceScore(
 				fields[0], 
@@ -322,13 +326,13 @@ public class RankingsNB {
 		scores.add(new AllianceScore(
 				fields[0], 
 				AllianceColour.BLUE, 
-				getInt(fields[9]),
 				getInt(fields[10]),
 				getInt(fields[11]),
 				getInt(fields[12]),
 				getInt(fields[13]),
 				getInt(fields[14]),
-				getInt(fields[15])
+				getInt(fields[15]),
+				getInt(fields[16])
 				));
 		
 		return true;
